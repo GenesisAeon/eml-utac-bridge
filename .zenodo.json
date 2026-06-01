@@ -1,0 +1,41 @@
+{
+  "title": "EML-UTAC Bridge — CREP as EML Operator Tree (GenesisAeon Package 37)",
+  "version": "0.1.0",
+  "description": "GenesisAeon Package 37: Mathematical bridge showing that all core components of the GenesisAeon framework (UTAC logistic ODE, CREP tensor, AFET entropy functional, unified Lagrangian) are fully expressible as finite binary trees of the single EML operator eml(x,y) = exp(x) - ln(y), introduced by Odrzywołek (2026). Analogous to NAND completeness in Boolean logic: one operator generates the entire framework. Includes formal reduction proofs, EML tree depth analysis, and a Diamond-interface system class for integration with genesis-os.",
+  "creators": [
+    {
+      "name": "Römer, Johann",
+      "affiliation": "MOR Research Collective"
+    }
+  ],
+  "keywords": [
+    "EML operator",
+    "UTAC",
+    "CREP tensor",
+    "AFET",
+    "GenesisAeon",
+    "elementary functions",
+    "operator completeness",
+    "mathematical physics",
+    "complex systems",
+    "logistic ODE",
+    "golden ratio",
+    "Package 37"
+  ],
+  "license": "MIT",
+  "upload_type": "software",
+  "access_right": "open",
+  "related_identifiers": [
+    {
+      "identifier": "10.5281/zenodo.17472834",
+      "relation": "isPartOf",
+      "scheme": "doi"
+    },
+    {
+      "identifier": "10.5281/zenodo.19645351",
+      "relation": "isDocumentedBy",
+      "scheme": "doi"
+    }
+  ],
+  "notes": "Part of the GenesisAeon Feldtheorie ecosystem (Packages 17–39). The EML operator eml(x,y)=exp(x)-ln(y) provides a universal basis for all GenesisAeon operators, paralleling NAND completeness. Reference for EML completeness theorem: Odrzywołek, A. (2026), arXiv April 2026."
+}
