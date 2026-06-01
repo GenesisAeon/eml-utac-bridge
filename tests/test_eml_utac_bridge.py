@@ -10,7 +10,7 @@ from eml_utac_bridge import (
     GenesisAeonReduction,
     GenesisAeonBridge,
 )
-from eml_utac_bridge.constants import PHI, SIGMA_PHI, V_RIG, GAMMA_UNIVERSAL
+from eml_utac_bridge.constants import PHI, PHI_CUBEROOT, SIGMA_PHI, V_RIG, GAMMA_UNIVERSAL
 
 
 class TestEMLOperator:
@@ -178,6 +178,10 @@ class TestGenesisAeonBridge:
 class TestConstants:
     def test_phi(self):
         assert abs(PHI - 1.6180339887) < 1e-9
+
+    def test_phi_cuberoot(self):
+        assert abs(PHI_CUBEROOT - 1.17398499670) < 1e-10
+        assert abs(PHI_CUBEROOT**3 - PHI) < 1e-12  # (Φ^(1/3))^3 == Φ
 
     def test_sigma_phi(self):
         assert SIGMA_PHI == 1 / 16
