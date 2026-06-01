@@ -23,17 +23,17 @@ class LagrangianAsEML:
         ln(y)  encodes potential/entropic energy (information)
     """
 
-    def __init__(self, alpha: float = 1.0, beta: float = 0.1, K: float = 1.0):
+    def __init__(self, alpha: float = 1.0, beta: float = 0.1, K: float = 1.0) -> None:
         self._eml = EMLOperator()
         self._crep = CREPasEML()
         self._afet = AFETaskEML(alpha=alpha, beta=beta, K=K)
 
     def kinetic(self, v: float) -> float:
-        """T = 0.5·v² as EML: eml(ln(|v|), 1) ... approximated."""
+        """T = 0.5·v²"""
         return 0.5 * v * v
 
     def potential(self, x: float) -> float:
-        """V = -ln(x+1) as EML: V = -(1 - eml(0, x+1)) = eml(0, x+1) - 1"""
+        """V = -ln(x+1) via EML: eml(0, x+1) - 1"""
         return -(1.0 - self._eml.compute(0.0, x + 1.0))
 
     def compute(
@@ -50,7 +50,7 @@ class LagrangianAsEML:
         gamma = self._crep.compute(C, R, E, P)
         return (T - V) + phi + gamma
 
-    def eml_structure_demo(self, x: float = 2.0, y: float = 1.5) -> dict:
+    def eml_structure_demo(self, x: float = 2.0, y: float = 1.5) -> dict[str, object]:
         """
         Demonstrates L = T - V ≅ EML structure.
 

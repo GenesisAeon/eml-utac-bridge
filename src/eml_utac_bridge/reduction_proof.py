@@ -29,13 +29,6 @@ class GenesisAeonReduction:
 
     Theorem: L = T - V + Phi(H) + Gamma(C,R,E,P) is expressible as a
     finite binary tree of EML operators applied to the constant 1.
-
-    Proof structure:
-      1. tanh(sigma*Gamma)  -> EML tree (depth ~3)
-      2. CREP Gamma         -> EML tree (depth ~6)
-      3. AFET Phi(H)        -> EML tree (depth ~4)
-      4. Full UTAC ODE      -> EML tree (depth ~8)
-      5. Lagrangian L       -> EML composition of 1-4
     """
 
     def __init__(self) -> None:
@@ -94,7 +87,9 @@ class GenesisAeonReduction:
 
     def prove_utac(self, H: float = 0.5, gamma: float = GAMMA_UNIVERSAL) -> ReductionResult:
         """Verify UTAC dH/dt equiv EML tree."""
-        direct = self._utac.r * H * (1 - H / self._utac.K) * math.tanh(self._utac.sigma * gamma)
+        direct = (
+            self._utac.r * H * (1 - H / self._utac.K) * math.tanh(self._utac.sigma * gamma)
+        )
         eml_val = self._utac.compute_dHdt(H, gamma)
         err = abs(direct - eml_val)
         return ReductionResult(
@@ -117,7 +112,7 @@ class GenesisAeonReduction:
         demo = self._lagrangian.eml_structure_demo()
         return ReductionResult(
             component="Lagrangian L",
-            eml_valid=demo["eml_is_L"],
+            eml_valid=bool(demo["eml_is_L"]),
             direct_value=L_val,
             eml_value=L_val,
             error=0.0,
@@ -135,7 +130,7 @@ class GenesisAeonReduction:
             self.prove_lagrangian(),
         ]
 
-    def reduction_summary(self) -> dict:
+    def reduction_summary(self) -> dict[str, object]:
         """Returns summary dict of full reduction."""
         results = self.run_full_reduction()
         all_valid = all(r.eml_valid for r in results)

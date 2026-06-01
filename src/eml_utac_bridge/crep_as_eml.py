@@ -30,7 +30,7 @@ class CREPasEML:
 
     def compute_direct(self, C: float, R: float, E: float, P: float) -> float:
         """Direct computation for numerical verification."""
-        return (C * R * E * P) ** 0.25
+        return float((C * R * E * P) ** 0.25)
 
     def verify_equivalence(
         self, C: float, R: float, E: float, P: float, tol: float = 1e-10
@@ -42,7 +42,7 @@ class CREPasEML:
         """EML tree depth: 4 ln-nodes + 1 sum + 1 div + 1 exp = ~6 nodes."""
         return 6
 
-    def crep_components_as_eml(self, C: float, R: float, E: float, P: float) -> dict:
+    def crep_components_as_eml(self, C: float, R: float, E: float, P: float) -> dict[str, float]:
         """Returns each CREP component expressed as EML value."""
         return {
             "ln_C_eml": self._eml.ln_from_eml(C),

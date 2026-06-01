@@ -5,6 +5,7 @@ Reference: Odrzywołek (2026) — a single binary operation generates all elemen
 from __future__ import annotations
 
 import math
+from typing import Any
 
 import numpy as np
 
@@ -28,8 +29,11 @@ class EMLOperator:
         return math.exp(x) - math.log(y)
 
     @staticmethod
-    def compute_array(x: np.ndarray, y: np.ndarray) -> np.ndarray:
-        return np.exp(x) - np.log(y)
+    def compute_array(
+        x: np.ndarray[Any, Any], y: np.ndarray[Any, Any]
+    ) -> np.ndarray[Any, Any]:
+        result: np.ndarray[Any, Any] = np.exp(x) - np.log(y)
+        return result
 
     @staticmethod
     def exp_from_eml(x: float) -> float:
@@ -45,21 +49,14 @@ class EMLOperator:
 
     @staticmethod
     def tanh_from_eml(x: float) -> float:
-        """
-        tanh(x) expressed via EML operations.
-
-        tanh(x) = (exp(2x) - 1) / (exp(2x) + 1)
-                = (eml(2x,1) - eml(0,1)) / (eml(2x,1) + eml(0,1) + 2)
-
-        Note: eml(0,1) = exp(0) - ln(1) = 1 - 0 = 1
-        """
-        e2x = EMLOperator.exp_from_eml(2 * x)  # eml(2x, 1) = exp(2x)
+        """tanh(x) = (exp(2x) - 1) / (exp(2x) + 1) via EML."""
+        e2x = EMLOperator.exp_from_eml(2 * x)
         return (e2x - 1.0) / (e2x + 1.0)
 
     @staticmethod
     def sigmoid_from_eml(x: float) -> float:
         """σ(x) = 1 / (1 + exp(-x)) via EML."""
-        neg_exp = EMLOperator.exp_from_eml(-x)  # eml(-x, 1)
+        neg_exp = EMLOperator.exp_from_eml(-x)
         return 1.0 / (1.0 + neg_exp)
 
     @staticmethod
@@ -69,11 +66,7 @@ class EMLOperator:
         return EMLOperator.exp_from_eml(exponent * ln_base)
 
     def eml_tree_depth_tanh(self) -> int:
-        """Returns the EML binary tree depth for tanh(x)."""
-        # eml(2x,1) → 1 node; subtraction/division → 2 more nodes
         return 3
 
     def eml_tree_depth_crep(self) -> int:
-        """Returns the EML binary tree depth for CREP Γ = (C·R·E·P)^(1/4)."""
-        # 3 ln nodes + 1 sum + 1 div/4 + 1 exp = 6 nodes
         return 6

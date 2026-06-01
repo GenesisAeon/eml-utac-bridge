@@ -24,28 +24,27 @@ class GenesisAeonBridge:
     H0: float = 0.1
     r: float = 0.3
     K: float = 1.0
-    _history: list = field(default_factory=list, repr=False)
+    _history: list[dict[str, object]] = field(default_factory=list, repr=False)
 
     def __post_init__(self) -> None:
         self._reduction = GenesisAeonReduction()
         self._utac = UTACasEML(r=self.r, K=self.K, sigma=self.sigma)
         self._crep = CREPasEML()
 
-    def run_cycle(self, duration: float = 10.0, n_steps: int = 1000) -> dict:
+    def run_cycle(self, duration: float = 10.0, n_steps: int = 1000) -> dict[str, object]:
         """Run UTAC integration via EML and record phase events."""
         H_traj = self._utac.integrate(self.H0, self.gamma, duration, n_steps)
         summary = self._reduction.reduction_summary()
-        self._history.append({
+        record: dict[str, object] = {
             "H_final": float(H_traj[-1]),
-            # True fixed points of dH/dt = r*H*(1-H/K)*tanh(σΓ) are H=0 and H=K
             "H_fixed_point": self.K,
             "reduction": summary,
-        })
-        return self._history[-1]
+        }
+        self._history.append(record)
+        return record
 
-    def get_crep_state(self) -> dict:
+    def get_crep_state(self) -> dict[str, object]:
         """Current CREP state with equal components that recover self.gamma exactly."""
-        # (g, g, g, g)^(1/4) = g  — consistent with the bridge's configured gamma
         g = self.gamma
         gamma_computed = self._crep.compute(g, g, g, g)
         return {
@@ -54,19 +53,18 @@ class GenesisAeonBridge:
             "sigma": self.sigma,
         }
 
-    def get_utac_state(self) -> dict:
+    def get_utac_state(self) -> dict[str, object]:
         """Current UTAC state."""
         return {
             "H": self.H0,
             "r": self.r,
             "K": self.K,
             "sigma": self.sigma,
-            # Fixed points are H=0 (unstable) and H=K (stable)
             "fixed_point": self.K,
             "dHdt": self._utac.compute_dHdt(self.H0, self.gamma),
         }
 
-    def get_phase_events(self) -> list:
+    def get_phase_events(self) -> list[dict[str, object]]:
         """Phase events: EML reduction validations that passed."""
         results = self._reduction.run_full_reduction()
         return [
@@ -74,10 +72,12 @@ class GenesisAeonBridge:
             for r in results if r.eml_valid
         ]
 
-    def to_zenodo_record(self) -> dict:
+    def to_zenodo_record(self) -> dict[str, object]:
         """Zenodo-compatible metadata record."""
         summary = self._reduction.reduction_summary()
-        keywords = ["EML", "UTAC", "CREP", "GenesisAeon", "elementary functions", "operator tree"]
+        keywords: list[str] = [
+            "EML", "UTAC", "CREP", "GenesisAeon", "elementary functions", "operator tree",
+        ]
         return {
             "title": "EML-UTAC Bridge — CREP as EML Operator Tree",
             "package": 37,
@@ -98,4 +98,4 @@ class GenesisAeonBridge:
 
     def eml_reduction_valid(self) -> bool:
         """True if all five GenesisAeon components reduce to EML."""
-        return self._reduction.reduction_summary()["full_reduction_valid"]
+        return bool(self._reduction.reduction_summary()["full_reduction_valid"])
