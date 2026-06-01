@@ -3,7 +3,9 @@
 Reference: Odrzywołek (2026) — a single binary operation generates all elementary functions.
 """
 from __future__ import annotations
+
 import math
+
 import numpy as np
 
 

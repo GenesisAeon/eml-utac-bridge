@@ -1,16 +1,15 @@
 """Tests for EML-UTAC Bridge (Package 37)."""
 import math
-import pytest
+
 from eml_utac_bridge import (
-    EMLOperator,
-    UTACasEML,
-    CREPasEML,
     AFETaskEML,
-    LagrangianAsEML,
-    GenesisAeonReduction,
+    CREPasEML,
+    EMLOperator,
     GenesisAeonBridge,
+    GenesisAeonReduction,
+    UTACasEML,
 )
-from eml_utac_bridge.constants import PHI, PHI_CUBEROOT, SIGMA_PHI, V_RIG, GAMMA_UNIVERSAL
+from eml_utac_bridge.constants import GAMMA_UNIVERSAL, PHI, PHI_CUBEROOT, SIGMA_PHI, V_RIG
 
 
 class TestEMLOperator:
@@ -48,8 +47,7 @@ class TestCREPasEML:
 
     def test_gamma_universal(self):
         crep = CREPasEML()
-        # CREP with equal components each equal to GAMMA_UNIVERSAL
-        # (g,g,g,g)^(1/4) = g
+        # (g, g, g, g)^(1/4) == g exactly
         g = GAMMA_UNIVERSAL
         gamma = crep.compute(g, g, g, g)
         assert abs(gamma - GAMMA_UNIVERSAL) < 1e-10
@@ -60,25 +58,40 @@ class TestCREPasEML:
 
 
 class TestUTACasEML:
-    def test_fixed_point(self):
+    def test_fixed_point_is_K(self):
         utac = UTACasEML(K=1.0, sigma=SIGMA_PHI)
-        fp = utac.fixed_point(GAMMA_UNIVERSAL)
-        # fixed_point returns K * tanh(sigma*Gamma), should be in (0, K)
-        assert 0 < fp < 1.0
+        # dH/dt = r*H*(1-H/K)*tanh(σΓ) → fixed points H=0 and H=K
+        assert utac.fixed_point() == 1.0
 
     def test_dHdt_zero_at_zero(self):
         utac = UTACasEML()
         assert abs(utac.compute_dHdt(0.0, 0.5)) < 1e-12
 
-    def test_integration_converges(self):
-        utac = UTACasEML(r=1.0, K=1.0, sigma=SIGMA_PHI)
+    def test_dHdt_zero_at_K(self):
+        utac = UTACasEML(K=1.0)
+        assert abs(utac.compute_dHdt(1.0, 0.5)) < 1e-12
+
+    def test_integration_converges_to_K(self):
+        # Use sigma=2.0 so tanh(σΓ) ≈ 0.46 gives a meaningful growth rate
+        utac = UTACasEML(r=1.0, K=1.0, sigma=2.0)
         H = utac.integrate(0.01, GAMMA_UNIVERSAL, 50.0, 5000)
-        fp = utac.fixed_point(GAMMA_UNIVERSAL)
-        assert abs(H[-1] - fp) < 0.01
+        assert abs(H[-1] - 1.0) < 0.01  # converges to K=1
 
     def test_tree_depth(self):
         utac = UTACasEML()
         assert utac.eml_tree_depth() == 8
+
+    def test_tree_denominator_correct(self):
+        # Verify build_tree denominator matches numerical formula
+        # tanh(x) = (exp(2x)-1)/(exp(2x)+1) — denominator is exp(2x)+1
+        # In build_tree: EMLNode("add", e2sg, one) — correct (+1, not +2)
+        utac = UTACasEML()
+        tree = utac.build_tree()
+        # tanh_node = tree.right: div(sub(e2sg,1), add(e2sg,1))
+        tanh_node = tree.right
+        denom = tanh_node.right
+        assert denom.op == "add"
+        assert denom.right.value == 1.0  # +1, not +2
 
 
 class TestAFETaskEML:
@@ -145,17 +158,17 @@ class TestGenesisAeonBridge:
         assert "reduction" in result
         assert result["reduction"]["full_reduction_valid"]
 
-    def test_get_crep_state(self):
+    def test_get_crep_state_consistent(self):
         bridge = GenesisAeonBridge()
         state = bridge.get_crep_state()
-        assert "gamma" in state
-        # gamma computed from balanced CREP components derived from GAMMA_UNIVERSAL
-        assert state["gamma"] > 0
+        # Equal components (g,g,g,g) must recover bridge.gamma exactly
+        assert abs(state["gamma"] - bridge.gamma) < 1e-10
+        assert state["C"] == bridge.gamma
 
     def test_get_utac_state(self):
         bridge = GenesisAeonBridge()
         state = bridge.get_utac_state()
-        assert "fixed_point" in state
+        assert state["fixed_point"] == bridge.K  # fixed point is K, not K*tanh(...)
         assert "dHdt" in state
 
     def test_get_phase_events(self):
@@ -181,19 +194,18 @@ class TestConstants:
 
     def test_phi_cuberoot(self):
         assert abs(PHI_CUBEROOT - 1.17398499670) < 1e-10
-        assert abs(PHI_CUBEROOT**3 - PHI) < 1e-12  # (Φ^(1/3))^3 == Φ
+        assert abs(PHI_CUBEROOT**3 - PHI) < 1e-12
 
     def test_sigma_phi(self):
         assert SIGMA_PHI == 1 / 16
 
     def test_v_rig(self):
-        assert abs(V_RIG - 1352.0) < 5.0  # approx 1352 km/s
+        assert abs(V_RIG - 1352.0) < 5.0
 
     def test_benchmark_targets(self):
-        # EML_TARGETS from spec
         r = GenesisAeonReduction()
         summary = r.reduction_summary()
-        assert summary["full_reduction_valid"]  # full_reduction_valid: True
+        assert summary["full_reduction_valid"]
         depths = summary["tree_depths"]
-        assert abs(depths["UTAC dH/dt"] - 8) <= 2   # tree_depth_utac: (8, 2)
-        assert abs(depths["CREP Gamma"] - 6) <= 2        # tree_depth_crep: (6, 2)
+        assert abs(depths["UTAC dH/dt"] - 8) <= 2
+        assert abs(depths["CREP Gamma"] - 6) <= 2

@@ -1,6 +1,8 @@
 """AFET entropy functional Φ(H) expressed via EML operations."""
 from __future__ import annotations
+
 import math
+
 from eml_utac_bridge.eml_operator import EMLOperator
 
 

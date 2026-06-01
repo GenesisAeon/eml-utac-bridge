@@ -4,9 +4,10 @@ L = T - V + Φ(H) + Γ(C,R,E,P)
   = kinetic - potential + AFET entropy + CREP tensor
 """
 from __future__ import annotations
-from eml_utac_bridge.eml_operator import EMLOperator
-from eml_utac_bridge.crep_as_eml import CREPasEML
+
 from eml_utac_bridge.afet_as_eml import AFETaskEML
+from eml_utac_bridge.crep_as_eml import CREPasEML
+from eml_utac_bridge.eml_operator import EMLOperator
 
 
 class LagrangianAsEML:

@@ -1,13 +1,15 @@
 """Formal reduction: all GenesisAeon components to EML operator tree."""
 from __future__ import annotations
+
 import math
-from dataclasses import dataclass, field
-from eml_utac_bridge.eml_operator import EMLOperator
-from eml_utac_bridge.utac_as_eml import UTACasEML
-from eml_utac_bridge.crep_as_eml import CREPasEML
+from dataclasses import dataclass
+
 from eml_utac_bridge.afet_as_eml import AFETaskEML
+from eml_utac_bridge.constants import GAMMA_UNIVERSAL, SIGMA_PHI
+from eml_utac_bridge.crep_as_eml import CREPasEML
+from eml_utac_bridge.eml_operator import EMLOperator
 from eml_utac_bridge.lagrangian_as_eml import LagrangianAsEML
-from eml_utac_bridge.constants import SIGMA_PHI, GAMMA_UNIVERSAL
+from eml_utac_bridge.utac_as_eml import UTACasEML
 
 
 @dataclass
@@ -58,7 +60,9 @@ class GenesisAeonReduction:
             notes="tanh(x) = (eml(2x,1)-1)/(eml(2x,1)+1)",
         )
 
-    def prove_crep(self, C: float = 0.8, R: float = 0.7, E: float = 0.6, P: float = 0.5) -> ReductionResult:
+    def prove_crep(
+        self, C: float = 0.8, R: float = 0.7, E: float = 0.6, P: float = 0.5
+    ) -> ReductionResult:
         """Verify CREP Gamma equiv EML tree."""
         direct = self._crep.compute_direct(C, R, E, P)
         eml_val = self._crep.compute(C, R, E, P)

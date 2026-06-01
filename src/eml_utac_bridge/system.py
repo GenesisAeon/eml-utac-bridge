@@ -1,10 +1,12 @@
-"""GenesisAeonBridge - Diamond interface for Package 37."""
+"""GenesisAeonBridge — Diamond interface for Package 37."""
 from __future__ import annotations
+
 from dataclasses import dataclass, field
+
+from eml_utac_bridge.constants import GAMMA_UNIVERSAL, SIGMA_PHI
+from eml_utac_bridge.crep_as_eml import CREPasEML
 from eml_utac_bridge.reduction_proof import GenesisAeonReduction
 from eml_utac_bridge.utac_as_eml import UTACasEML
-from eml_utac_bridge.crep_as_eml import CREPasEML
-from eml_utac_bridge.constants import SIGMA_PHI, GAMMA_UNIVERSAL
 
 
 @dataclass
@@ -35,20 +37,20 @@ class GenesisAeonBridge:
         summary = self._reduction.reduction_summary()
         self._history.append({
             "H_final": float(H_traj[-1]),
-            "H_fixed_point": self._utac.fixed_point(self.gamma),
+            # True fixed points of dH/dt = r*H*(1-H/K)*tanh(σΓ) are H=0 and H=K
+            "H_fixed_point": self.K,
             "reduction": summary,
         })
         return self._history[-1]
 
     def get_crep_state(self) -> dict:
-        """Current CREP state (using gamma as stand-in for balanced CREP)."""
+        """Current CREP state with equal components that recover self.gamma exactly."""
+        # (g, g, g, g)^(1/4) = g  — consistent with the bridge's configured gamma
         g = self.gamma
-        sq = g ** 0.5
-        C, R, E, P = sq, sq, sq, sq
-        gamma_computed = self._crep.compute(C, R, E, P)
+        gamma_computed = self._crep.compute(g, g, g, g)
         return {
             "gamma": gamma_computed,
-            "C": C, "R": R, "E": E, "P": P,
+            "C": g, "R": g, "E": g, "P": g,
             "sigma": self.sigma,
         }
 
@@ -59,7 +61,8 @@ class GenesisAeonBridge:
             "r": self.r,
             "K": self.K,
             "sigma": self.sigma,
-            "fixed_point": self._utac.fixed_point(self.gamma),
+            # Fixed points are H=0 (unstable) and H=K (stable)
+            "fixed_point": self.K,
             "dHdt": self._utac.compute_dHdt(self.H0, self.gamma),
         }
 
@@ -74,8 +77,9 @@ class GenesisAeonBridge:
     def to_zenodo_record(self) -> dict:
         """Zenodo-compatible metadata record."""
         summary = self._reduction.reduction_summary()
+        keywords = ["EML", "UTAC", "CREP", "GenesisAeon", "elementary functions", "operator tree"]
         return {
-            "title": "EML-UTAC Bridge - CREP as EML Operator Tree",
+            "title": "EML-UTAC Bridge — CREP as EML Operator Tree",
             "package": 37,
             "description": (
                 "GenesisAeon Package 37: Mathematical bridge showing that all "
@@ -83,8 +87,8 @@ class GenesisAeonBridge:
                 "expressible as binary trees of the EML operator eml(x,y)=exp(x)-ln(y). "
                 "Reference: Odrzywołek (2026)."
             ),
-            "creators": [{"name": "Roemer, Johann", "affiliation": "MOR Research Collective"}],
-            "keywords": ["EML", "UTAC", "CREP", "GenesisAeon", "elementary functions", "operator tree"],
+            "creators": [{"name": "Römer, Johann", "affiliation": "MOR Research Collective"}],
+            "keywords": keywords,
             "related_identifiers": [
                 {"identifier": "10.5281/zenodo.17472834", "relation": "isPartOf"},
             ],

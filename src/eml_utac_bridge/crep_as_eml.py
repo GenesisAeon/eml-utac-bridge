@@ -1,6 +1,6 @@
 """CREP tensor Γ = (C·R·E·P)^(1/4) expressed as EML operator tree."""
 from __future__ import annotations
-import math
+
 from eml_utac_bridge.eml_operator import EMLOperator
 
 
@@ -32,11 +32,11 @@ class CREPasEML:
         """Direct computation for numerical verification."""
         return (C * R * E * P) ** 0.25
 
-    def verify_equivalence(self, C: float, R: float, E: float, P: float, tol: float = 1e-10) -> bool:
+    def verify_equivalence(
+        self, C: float, R: float, E: float, P: float, tol: float = 1e-10
+    ) -> bool:
         """Check EML formulation matches direct computation."""
-        eml_val = self.compute(C, R, E, P)
-        direct_val = self.compute_direct(C, R, E, P)
-        return abs(eml_val - direct_val) < tol
+        return abs(self.compute(C, R, E, P) - self.compute_direct(C, R, E, P)) < tol
 
     def eml_tree_depth(self) -> int:
         """EML tree depth: 4 ln-nodes + 1 sum + 1 div + 1 exp = ~6 nodes."""
