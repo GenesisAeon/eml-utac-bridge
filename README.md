@@ -53,6 +53,12 @@ Energie (Information). Der Lagrangian *ist* der EML-Operator.
 
 ---
 
+## Installation
+
+```bash
+pip install eml-utac-bridge
+```
+
 ## Quickstart
 
 ```bash

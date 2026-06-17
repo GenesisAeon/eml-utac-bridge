@@ -1,21 +1,22 @@
 [project]
-name = "diamond-setup"
+name = "eml-utac-bridge"
 version = "1.0.0"
-description = "Universal Python project scaffold â€” generate professional project skeletons in seconds"
+description = "GenesisAeon Package 37: mathematical bridge showing UTAC, CREP, AFET, and the unified Lagrangian all reduce to finite binary trees of the single EML operator eml(x,y) = exp(x) - ln(y)"
 readme = "README.md"
 license = { text = "MIT" }
-authors = [{ name = "GenesisAeon" }]
+authors = [{ name = "Johann Römer" }]
 requires-python = ">=3.11"
-keywords = ["scaffold", "template", "cli", "project-generator", "skeleton"]
+keywords = ["EML operator", "UTAC", "CREP", "GenesisAeon", "mathematical physics", "operator completeness"]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Environment :: Console",
     "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
-    "Topic :: Software Development :: Code Generators",
+    "Topic :: Scientific/Engineering :: Physics",
 ]
 dependencies = [
     "typer>=0.12.0",
@@ -42,11 +43,11 @@ dev = [
 diamond = "diamond_setup.cli:app"
 
 [project.urls]
-Homepage = "https://github.com/GenesisAeon/diamond-setup"
-Repository = "https://github.com/GenesisAeon/diamond-setup"
-Documentation = "https://genesisaeon.github.io/diamond-setup"
-Issues = "https://github.com/GenesisAeon/diamond-setup/issues"
-Zenodo = "https://doi.org/10.5281/zenodo.XXXXXXX"
+Homepage = "https://github.com/GenesisAeon/eml-utac-bridge"
+Repository = "https://github.com/GenesisAeon/eml-utac-bridge"
+Documentation = "https://genesisaeon.github.io/eml-utac-bridge"
+Issues = "https://github.com/GenesisAeon/eml-utac-bridge/issues"
+Zenodo = "https://doi.org/10.5281/zenodo.17472834"
 
 [build-system]
 requires = ["hatchling"]
