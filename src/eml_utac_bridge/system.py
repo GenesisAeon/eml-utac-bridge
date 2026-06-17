@@ -92,7 +92,7 @@ class GenesisAeonBridge:
             "related_identifiers": [
                 {"identifier": "10.5281/zenodo.17472834", "relation": "isPartOf"},
             ],
-            "version": "0.1.0",
+            "version": "1.0.0",
             "reduction_summary": summary,
         }
 
