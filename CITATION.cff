@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+type: software
+title: "eml-utac-bridge"
+version: "1.0.0"
+date-released: "2026-06-17"
+authors:
+  - family-names: Römer
+    given-names: Johann
+repository-code: "https://github.com/GenesisAeon/eml-utac-bridge"
+license: MIT
+abstract: "GenesisAeon Package 37: mathematical bridge showing UTAC, CREP, AFET, and the unified Lagrangian all reduce to finite binary trees of the single EML operator eml(x,y) = exp(x) - ln(y)"
+keywords:
+  - GenesisAeon
+  - UTAC
+  - CREP
+  - open-science
+  - EML operator
+  - mathematical physics
+  - operator completeness
