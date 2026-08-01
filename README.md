@@ -5,8 +5,8 @@
 [![CI](https://github.com/GenesisAeon/eml-utac-bridge/actions/workflows/ci.yml/badge.svg)](https://github.com/GenesisAeon/eml-utac-bridge/actions/workflows/ci.yml)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue)](https://www.python.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Package 37](https://img.shields.io/badge/GenesisAeon-Package%2037-purple)](https://doi.org/10.5281/zenodo.17472834)
-[![Zenodo](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.17472834-blue)](https://doi.org/10.5281/zenodo.17472834)
+[![Package 37](https://img.shields.io/badge/GenesisAeon-Package%2037-purple)](https://doi.org/10.5281/zenodo.20788473)
+[![Zenodo](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.20788473-blue)](https://doi.org/10.5281/zenodo.20788473)
 [![Whitepaper](https://img.shields.io/badge/Whitepaper-10.5281%2Fzenodo.19645351-orange)](https://doi.org/10.5281/zenodo.19645351)
 
 ---
@@ -182,7 +182,7 @@ einen endlichen EML-Baum bilden. Die tiefste Implikation: `tanh(σΓ) = Grenzfal
   title     = {{EML-UTAC Bridge — CREP als EML-Operator-Baum (GenesisAeon Package 37)}},
   year      = {2026},
   publisher = {Zenodo},
-  doi       = {10.5281/zenodo.17472834},
+  doi       = {10.5281/zenodo.20788473},
   url       = {https://github.com/GenesisAeon/eml-utac-bridge}
 }
 ```

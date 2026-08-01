@@ -48,7 +48,7 @@ Homepage = "https://github.com/GenesisAeon/eml-utac-bridge"
 Repository = "https://github.com/GenesisAeon/eml-utac-bridge"
 Documentation = "https://genesisaeon.github.io/eml-utac-bridge"
 Issues = "https://github.com/GenesisAeon/eml-utac-bridge/issues"
-Zenodo = "https://doi.org/10.5281/zenodo.17472834"
+Zenodo = "https://doi.org/10.5281/zenodo.20788473"
 
 [build-system]
 requires = ["hatchling"]
