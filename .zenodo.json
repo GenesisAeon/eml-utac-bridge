@@ -27,18 +27,20 @@
   "access_right": "open",
   "related_identifiers": [
     {
-      "identifier": "10.5281/zenodo.17472834",
+      "identifier": "10.5281/zenodo.19645351",
       "relation": "isPartOf",
       "scheme": "doi"
     },
     {
-      "identifier": "10.5281/zenodo.19645351",
+      "identifier": "10.5281/zenodo.20788473",
       "relation": "isDocumentedBy",
       "scheme": "doi"
     }
   ],
   "notes": "Part of the GenesisAeon Feldtheorie ecosystem (Packages 17–39). The EML operator eml(x,y)=exp(x)-ln(y) provides a universal basis for all GenesisAeon operators, paralleling NAND completeness. Reference for EML completeness theorem: Odrzywołek, A. (2026), arXiv April 2026.",
   "communities": [
-    { "identifier": "genesisaeon" }
+    {
+      "identifier": "genesisaeon"
+    }
   ]
 }
